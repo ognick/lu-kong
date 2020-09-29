@@ -1,0 +1,7 @@
+.theia/
+.DS_Store
+*.elf
+*.bin
+*.icloud
+CMakeLists.txt
+cmake-build-debug/
