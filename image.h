@@ -1,14 +1,16 @@
 #pragma once
 
+#include <stdint.h>
+
 struct Image
 {
-    const unsigned char* data;
-    const unsigned short width;
-    const unsigned short height;
+    const uint8_t* data;
+    const uint16_t width;
+    const uint16_t height;
 
-    unsigned char get_pixel(unsigned short x, unsigned short y) const
+    uint8_t get_pixel(uint16_t x, uint16_t y) const
     {
-        const unsigned long offset = x + y * width;
+        const uint32_t offset = x + y * width;
         return data[offset];
     }
 };

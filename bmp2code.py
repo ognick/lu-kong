@@ -1,17 +1,12 @@
 #!/usr/bin/python3
 
-'''
-# Example:
-> python bmp2code.py m5_logo.bmp
-> Out:m5_logo_img.c Done!
-'''
-
 import os
 import sys
 
 from PIL import Image
 
-in_name = sys.argv[1]
+
+[_, in_name] = sys.argv
 [name, ext] = in_name.split('.')
 out_name = name + '_img.cpp'
 file_size = os.path.getsize(in_name)
@@ -49,7 +44,7 @@ def write_line(f, line=''):
 
 with open(out_name, 'wb+') as outfile:
     write_line(outfile, '#include "image.h"')
-    write_line(outfile, f'const unsigned char {name}_data [{width * height}] = ' + '{')
+    write_line(outfile, f'const uint8_t {name}_data [{width * height}] = ' + '{')
     for y in range(height):
         for x in range(width):
             color = data[x, y]

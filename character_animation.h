@@ -1,7 +1,9 @@
 #pragma once
 
-#include "animation.h"
+#include "sprite_animation.h"
+#include "direction.h"
 #include <map>
+#include <stdint.h>
 
 enum class AnimationType : uint8_t
 {
@@ -14,25 +16,22 @@ enum class AnimationType : uint8_t
     CLIMB
 };
 
-enum class Direction : uint8_t
+struct CharacterAnimation
 {
-    NONE,
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-};
-
-struct Character
-{
-    Character(Screen& screen)
+    CharacterAnimation(Screen& screen)
         : screen(screen)
     {
     }
 
+    void set_hot_point(uint8_t x, uint8_t y)
+    {
+        hot_point_x = x;
+        hot_point_y = y;
+    }
+
     void add_animation(AnimationType type, const Image& img, uint8_t frame_count)
     {
-        animations.emplace(type, Animation{screen, img, frame_count});
+        animations.emplace(type, SpriteAnimation{screen, img, frame_count});
     }
 
     void set_animation_type(AnimationType type_)
@@ -59,7 +58,7 @@ struct Character
         auto find_it = animations.find(type);
         if (find_it != animations.end())
         {
-            Animation& animation = find_it->second;
+            SpriteAnimation& animation = find_it->second;
             animation.clear();
         }
     }
@@ -69,17 +68,20 @@ struct Character
         auto find_it = animations.find(type);
         if (find_it != animations.end())
         {
-            Animation& animation = find_it->second;
+            SpriteAnimation& animation = find_it->second;
             const uint8_t sprite_idx = frame_idx % animation.horizontal_frame_count;
             const bool reverse = (dir == Direction::LEFT);
-            animation.draw(x, y, sprite_idx, reverse);
+            animation.draw(x - hot_point_x, y - hot_point_y, sprite_idx, reverse);
         }
         ++frame_idx;
     }
 
     Screen& screen;
-    std::map<AnimationType, Animation> animations;
+    std::map<AnimationType, SpriteAnimation> animations;
     AnimationType type = AnimationType::IDLE;
     Direction dir = Direction::NONE;
     uint8_t frame_idx = 0;
+
+    uint8_t hot_point_x = 0;
+    uint8_t hot_point_y = 0;
 };

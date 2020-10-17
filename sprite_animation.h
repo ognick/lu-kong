@@ -2,9 +2,9 @@
 
 #include "screen.h"
 
-struct Animation
+struct SpriteAnimation
 {
-    Animation(Screen& screen, const Image& img, uint8_t horizontal_frame_count)
+    SpriteAnimation(Screen& screen, const Image& img, uint8_t horizontal_frame_count)
             : screen(screen)
             , img(img)
             , horizontal_frame_count(horizontal_frame_count)
@@ -20,18 +20,26 @@ struct Animation
         {
             for (size_t y = 0; y < img.height; y++)
             {
+                const int16_t sx = x0 + x;
+                const int16_t sy = y0 + y;
+                if (clear && screen.is_override(sx, sy))
+                {
+                    continue;
+                }
+
                 int16_t img_x = x;
                 if (reverse) {
                     img_x = frame_width - x - 1;
                 }
+
                 uint8_t color = img.get_pixel(img_x + offset_x, y);
                 if (color != transparent_color)
                 {
                     if (clear)
                     {
-                        color = screen.bg.get_pixel(x0 + x, y0 + y);
+                        color = screen.bg.get_pixel(sx, sy);
                     }
-                    screen.set_pixel(x0 + x, y0 + y, color);
+                    screen.set_pixel(sx, sy, color);
                 }
             }
         }
