@@ -3,5 +3,4 @@
 *.elf
 *.bin
 *.icloud
-CMakeLists.txt
-cmake-build-debug/
+_build/

@@ -14,7 +14,8 @@ extern const Image bg_img;
 
 Screen screen(bg_img);
 CharacterAnimation player(screen);
-Level level(bg_img);
+Level level(bg_img, screen, 2);
+Level::BoundingBox character_bb;
 
 void setup()
 {
@@ -24,15 +25,17 @@ void setup()
     player.add_animation(AnimationType::WALK, player_walk_img, 6);
     player.add_animation(AnimationType::CLIMB, player_climb_img, 6);
     player.add_animation(AnimationType::ATTACK, player_attack_img, 6);
-    player.set_hot_point(24, 48);
+    character_bb.width = 6;
+    character_bb.height = 24;
+    player.set_hot_point(12, character_bb.height);
+    character_bb.x = 120;
+    character_bb.y = 20;
 }
 
 const uint8_t fps = 7;
 const uint32_t frame_time_ms = static_cast<uint32_t>(1 / static_cast<float>(fps) * 1000);
-const uint16_t step = 6;
+const uint16_t speed = 6;
 uint8_t attack_frame_count = 0;
-int32_t pos_obj_y = 90;
-int32_t pos_obj_x = 160;
 
 void loop()
 {
@@ -76,6 +79,10 @@ void loop()
         player.set_animation_type(AnimationType::ATTACK);
         --attack_frame_count;
     }
+    else if (player.type == AnimationType::ATTACK)
+    {
+        player.set_animation_type(AnimationType::IDLE);
+    }
 
     if (direction != Direction::NONE)
     {
@@ -86,18 +93,15 @@ void loop()
         player.set_animation_type(AnimationType::IDLE);
     }
 
-    Level::SurfacePoint next_point = level.get_next_character_point(pos_obj_x, pos_obj_y, direction, step);
-
-    if (player.type == AnimationType::CLIMB && next_point.type != Level::STAIR)
+    Level::SurfaceType surface_type = level.move_object(character_bb, direction, speed);
+    if (player.type == AnimationType::CLIMB && surface_type != Level::SurfaceType::STAIR)
     {
         player.set_animation_type(AnimationType::IDLE);
     }
 
-    pos_obj_x = next_point.x;
-    pos_obj_y = next_point.y;
-    player.draw(pos_obj_x, next_point.y);
+    const bool move = (player.type == AnimationType::CLIMB && direction == Direction::NONE);
+    player.draw(character_bb.x, character_bb.y, move);
 
- 
     screen.render();
     const uint32_t end_frame_ms = millis();
     delay(frame_time_ms - (end_frame_ms - start_frame_ms));

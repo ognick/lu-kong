@@ -27,6 +27,11 @@ struct Screen
         }
     }
 
+    void clear_pixel(int32_t x, int32_t y)
+    {
+        set_pixel(x, y, bg.get_pixel(x, y));
+    }
+
     void set_pixel(int32_t x, int32_t y, uint8_t color)
     {
         if (x >= 0 && y >= 0 && x < bg.width && y < bg.height)

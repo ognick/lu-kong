@@ -63,7 +63,7 @@ struct CharacterAnimation
         }
     }
 
-    void draw(int16_t x, int16_t y)
+    void draw(int16_t x, int16_t y, bool pause = false)
     {
         auto find_it = animations.find(type);
         if (find_it != animations.end())
@@ -73,7 +73,11 @@ struct CharacterAnimation
             const bool reverse = (dir == Direction::LEFT);
             animation.draw(x - hot_point_x, y - hot_point_y, sprite_idx, reverse);
         }
-        ++frame_idx;
+
+        if (!pause)
+        {
+            ++frame_idx;
+        }
     }
 
     Screen& screen;

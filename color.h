@@ -4,6 +4,9 @@
 
 struct Color
 {
+    static const uint8_t BLACK_8BIT = 0x00;
+    static const uint8_t RED_8BIT = 0xe0;
+
     struct RGB {
         RGB(uint8_t r, uint8_t g, uint8_t b)
             :r(r), g(g), b(b)
