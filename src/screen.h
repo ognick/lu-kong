@@ -2,7 +2,7 @@
 
 #include <odroid_go.h>
 #include "color.h"
-#include "image.h"
+#include "res/image.h"
 
 #include <stdint.h>
 #include <map>

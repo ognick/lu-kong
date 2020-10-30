@@ -1,7 +1,7 @@
-#include "image.h"
-#include "screen.h"
-#include "character_animation.h"
-#include "level.h"
+#include "src/res/image.h"
+#include "src/screen.h"
+#include "src/character_animation.h"
+#include "src/level.h"
 
 #include <odroid_go.h>
 #include <stdint.h>

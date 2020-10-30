@@ -2,7 +2,7 @@
 
 #include "color.h"
 #include "point.h"
-#include "image.h"
+#include "res/image.h"
 #include "screen.h"
 #include "direction.h"
 

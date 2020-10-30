@@ -8,7 +8,9 @@ from PIL import Image
 
 [_, in_name] = sys.argv
 [name, ext] = in_name.split('.')
-out_name = name + '_img.cpp'
+curr_dir = os.path.dirname(os.path.abspath(__file__))
+out_name = os.path.abspath(os.path.join(__file__ , '..', '..', 'src', 'res', f'{name}_img.cpp'))
+print(out_name)
 file_size = os.path.getsize(in_name)
 
 img = Image.open(in_name)
